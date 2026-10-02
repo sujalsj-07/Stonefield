@@ -1,0 +1,1179 @@
+<!-- SAMPLE REQUEST FORM -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>New sample request</title>
+    <style>
+        :root {
+            --text: #1f2328;
+            --muted: #6b7280;
+            --border: #d9dce1;
+            --bg: #ffffff;
+            --surface: #f7f8fa;
+            --accent: #1f2328;
+            --success: #1a7f37;
+            --success-bg: #eef7f0;
+            --error: #b42318;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 14px;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        .container {
+            width: 100%;
+            padding: 24px 16px 40px;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 20px;
+        }
+
+        .section {
+            margin-bottom: 28px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0 0 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .notice {
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--success);
+            background: var(--surface);
+            padding: 10px 12px;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .notice strong {
+            font-weight: 600;
+        }
+
+        .row {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .row-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .row-title {
+            font-weight: 600;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 6px;
+        }
+
+        .remove-btn:hover {
+            color: var(--error);
+        }
+
+        .grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-product {
+            grid-template-columns: 2fr 1fr 1fr;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 700px) {
+
+            .grid-3,
+            .grid-product {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .req {
+            color: var(--error);
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            font: inherit;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 8px 10px;
+            background: var(--bg);
+        }
+
+        textarea {
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        input[readonly],
+        textarea[readonly],
+        input:disabled {
+            background: var(--surface);
+            color: var(--muted);
+        }
+
+        input:disabled {
+            cursor: not-allowed;
+        }
+
+        .invalid {
+            border-color: var(--error);
+        }
+
+        .field-error {
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* ---------- Searchable dropdown ---------- */
+        .combo {
+            position: relative;
+        }
+
+        .combo input.is-standard {
+            border-color: var(--success);
+            background: var(--success-bg);
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .combo-hint {
+            font-size: 12px;
+            margin-top: 4px;
+            color: var(--muted);
+        }
+
+        .combo-hint.standard {
+            color: var(--success);
+        }
+
+        .combo-list {
+            position: absolute;
+            z-index: 20;
+            left: 0;
+            right: 0;
+            top: calc(100% + 2px);
+            margin: 0;
+            padding: 4px 0;
+            list-style: none;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+            max-height: 260px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .combo-list.open {
+            display: block;
+        }
+
+        .combo-item {
+            padding: 8px 10px;
+            cursor: pointer;
+            line-height: 1.35;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .combo-item .meta {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .combo-item.standard .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 5px;
+            flex: none;
+            background: var(--success);
+        }
+
+        .combo-item.standard .name {
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .combo-item.active,
+        .combo-item:hover {
+            background: var(--surface);
+        }
+
+        .combo-msg {
+            padding: 8px 10px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
+        button.btn {
+            font: inherit;
+            font-weight: 500;
+            border-radius: 4px;
+            padding: 9px 16px;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface);
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border: 1px solid var(--accent);
+        }
+
+        button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        button:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .status {
+            margin-top: 16px;
+            font-size: 13px;
+            text-align: right;
+        }
+
+        .status.ok {
+            color: var(--success);
+        }
+
+        .status.err {
+            color: var(--error);
+        }
+    </style>
+
+    <script src="
+https://cdn.jsdelivr.net/npm/@superleapai/flow-ui@2.7.2/dist/superleap-flow.min.js
+"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <!-- <h1>New sample request</h1> -->
+
+        <!-- ============ Sample request ============ -->
+        <section class="section">
+            <!-- <h2 class="section-title">Sample request</h2> -->
+            <div class="grid grid-3">
+                <div>
+                    <label for="sr_name">Name <span class="req">*</span></label>
+                    <input type="text" id="sr_name" placeholder="Enter a name">
+                    <div class="field-error"></div>
+                </div>
+                <div>
+                    <label for="sr_account">Associated account <span class="req">*</span></label>
+                    <div class="combo">
+                        <input type="text" id="sr_account" placeholder="Search account" autocomplete="off" role="combobox"
+              aria-autocomplete="list">
+                        <ul class="combo-list" role="listbox"></ul>
+                    </div>
+                    <div class="field-error"></div>
+                </div>
+                <div>
+                    <label for="sr_contact">Associated contact</label>
+                    <div class="combo">
+                        <input type="text" id="sr_contact" placeholder="Select an account first" autocomplete="off" role="combobox"
+              aria-autocomplete="list" disabled>
+                        <ul class="combo-list" role="listbox"></ul>
+                    </div>
+                    <div class="field-error"></div>
+                </div>
+                <div class="full">
+                    <label for="sr_description">Description</label>
+                    <textarea id="sr_description" placeholder="Optional"></textarea>
+                    <div class="field-error"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ Products ============ -->
+        <section class="section">
+            <h2 class="section-title">Products</h2>
+            <div class="notice">
+                <strong>Products:</strong> All green indicated products are from standard list. Please prefer to select
+                from
+                standard list.
+            </div>
+            <div id="rows"></div>
+            <button type="button" class="btn btn-secondary" id="addMoreBtn">+ Add more</button>
+        </section>
+
+        <div class="actions">
+            <button type="button" class="btn btn-primary" id="submitBtn">Submit</button>
+        </div>
+        <div id="status" class="status" role="status"></div>
+    </div>
+
+    <script>
+        /* ================= CONFIG ================= */
+    const DRY_RUN = false;              // true = only logs payloads, nothing is written to Superleap
+    const DEBUG_API = true;            // true = logs API responses (turn off once everything is confirmed)
+    const USE_MOCK_PRODUCTS = false;   // true = dummy product list instead of Stonefield API
+
+    const SUPERLEAP_API = {
+      baseUrl: 'https://app.superleap.com/api/v1',
+      tokenParam: 'token',             // URL param holding the token, e.g. form.html?token=XXXX
+    };
+
+    const SAMPLE_REQUEST = {
+      objectSlug: 'sample_requests',
+      fields: {
+        name: 'name',
+        account: 'associated_account',
+        contact: 'associated_contact',
+        description: 'description',
+        formReference: 'form_reference',   // unique code per submission, used to find the created record
+      },
+    };
+
+    const PRODUCTS = {
+      objectSlug: 'products',
+      fields: {
+        product: 'name',
+        packing: 'packing',
+        quantity: 'quantity',
+        remarks: 'remarks',
+        sampleRequest: 'associated_sample_request',
+      },
+    };
+
+    const LOOKUPS = {
+      accountsSlug: 'accounts',
+      contactsSlug: 'contacts',
+      contactAccountField: 'associated_account',   // field on contacts that links to the account
+      maxPages: 50,                    // safety stop for pagination
+      maxShown: 50,                    // max options rendered in a dropdown at once
+    };
+
+    const PRODUCT_API = {
+      authUrl: 'https://api.stonefield.in/api/superleap/authorize',
+      searchUrl: 'https://api.stonefield.in/api/superleap/productdataintegration',
+      apiKey: 'SFF@FI@1098',
+      minChars: 2,
+      debounceMs: 350,
+    };
+    /* ========================================== */
+
+
+    /* ============ CRM bridge (Superleap Flow UI) ============ */
+    // closeForm() only works after connect() has completed, so connect once on startup
+    // and have everything that talks to the CRM await this promise.
+    let bridgeConnected = false;
+
+    async function waitForSuperLeap(maxWait = 5000, interval = 100) {
+      for (let elapsed = 0; elapsed < maxWait; elapsed += interval) {
+        if (window.SuperLeap) return true;
+        await new Promise(r => setTimeout(r, interval));
+      }
+      return false;
+    }
+
+    const bridgeReady = (async () => {
+      if (!(await waitForSuperLeap()) || typeof SuperLeap.connect !== 'function') {
+        // console.log('[bridge] SuperLeap.connect not available, running standalone');
+        return null;
+      }
+      try {
+        // console.log('[bridge] Attempting CRM bridge connection...');
+        const { context } = await SuperLeap.connect({ flowId: 'sample-request', timeout: 3000 });
+        bridgeConnected = true;
+        // console.log('[bridge] CRM bridge connected, context:', context);
+        return context;
+      } catch (err) {
+        // console.log('[bridge] CRM bridge not available, using standalone mode:', err.message);
+        return null;
+      }
+    })();
+
+    async function closeCRMForm() {
+      await bridgeReady;
+      if (!bridgeConnected || typeof SuperLeap.closeForm !== 'function') {
+        console.warn('[bridge] closeForm skipped: bridge not connected');
+        return;
+      }
+      try { SuperLeap.closeForm(); }
+      catch (e) {
+        console.log('[bridge] closeForm error:', e.message);
+      }
+    }
+
+
+    /* ============ Superleap API ============ */
+    // Read the token from the URL once (?token=... or #token=...), then remove it from the address bar
+    const SUPERLEAP_AUTH = (() => {
+      const query = new URLSearchParams(window.location.search);
+
+      // Superleap's iframe.setData() appends its own "?_param=..." to the URL. Because our URL ends
+      // with "#token=...", that addition lands inside the hash, so split it off before reading the token.
+      const [hashPart, hashQuery = ''] = window.location.hash.slice(1).split('?');
+      const hash = new URLSearchParams(hashPart);
+      new URLSearchParams(hashQuery).forEach((v, k) => { if (!query.has(k)) query.set(k, v); });
+
+      const raw = (query.get(SUPERLEAP_API.tokenParam) || hash.get(SUPERLEAP_API.tokenParam) || '').trim();
+
+      if (raw) {
+        query.delete(SUPERLEAP_API.tokenParam);
+        hash.delete(SUPERLEAP_API.tokenParam);
+        const qs = query.toString(), hs = hash.toString();
+        history.replaceState(null, '', window.location.pathname + (qs ? `?${qs}` : '') + (hs ? `#${hs}` : ''));
+      }
+      if (!raw) return null;
+      return /^bearer\s/i.test(raw) ? raw : `Bearer ${raw}`;   // accept with or without "Bearer "
+    })();
+
+    // TEMP DEBUG: shows token length + prefix only (remove once login works)
+    // console.log('[form token]', SUPERLEAP_AUTH ? SUPERLEAP_AUTH.length : 0, SUPERLEAP_AUTH ? SUPERLEAP_AUTH.slice(0, 13) : '(none)');
+
+
+    async function superleapPost(path, body) {
+      if (!SUPERLEAP_AUTH) throw new Error('Missing Superleap token');
+      const res = await fetch(`${SUPERLEAP_API.baseUrl}${path}`, {
+        method: 'POST',
+        headers: {
+          Authorization: SUPERLEAP_AUTH,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(data?.data?.message || data?.message || data?.error || `HTTP ${res.status}`);
+      return data;
+    }
+
+    function bulkCreate(objectSlug, records) {
+      return superleapPost(`/org/objects/${objectSlug}/record/bulk_create`, records);
+    }
+
+    // bulk_create only returns { success, data: { message } }, no IDs,
+    // so the sample request is found again by its unique form_reference.
+    async function findSampleRequestIds(formReference) {
+      const field = SAMPLE_REQUEST.fields.formReference;
+      const data = await superleapPost(`/org/objects/${SAMPLE_REQUEST.objectSlug}/filter`, {
+        query: {
+          fields: ['id', field],
+          filters: { and: [{ field, operator: 'eq', value: formReference }] },
+        },
+      });
+      const records = Array.isArray(data?.data?.records) ? data.data.records : [];
+      // double-check the match ourselves, in case the filter is ignored or loosely matched
+      return records.filter(r => r?.[field] === formReference && r?.id).map(r => String(r.id));
+    }
+
+    // The record may take a moment to become searchable, so try a few times
+    async function findSampleRequestIdWithRetry(formReference, attempts = 4, delayMs = 1000) {
+      for (let i = 1; i <= attempts; i++) {
+        const ids = await findSampleRequestIds(formReference);
+        if (ids.length === 1) return ids[0];
+        if (ids.length > 1) throw new Error(`Found ${ids.length} sample requests with the same reference. Check Superleap before retrying.`);
+        if (i < attempts) await new Promise(r => setTimeout(r, delayMs));
+      }
+      return null;   // not found
+    }
+
+
+    /* ============ Account / contact lookups ============ */
+    const lookupCache = {};            // slug -> Promise<[{label, value}]>
+
+    // Response (assumed same as before): { success, data: { records: [ { id, name } ], next_token? } }
+    // TODO: confirm response + pagination of the /filter endpoint
+    function extractRecordsPage(data) {
+      return {
+        records: Array.isArray(data?.data?.records) ? data.data.records : [],
+        nextToken: data?.data?.next_token || null,
+      };
+    }
+
+    const ALL_RECORDS_FILTER = { and: [{ field: 'id', operator: 'not_empty', value: '1' }] };
+
+    async function fetchAllRecords(slug, { fields = ['name', 'record_id'], filters = ALL_RECORDS_FILTER, accept = () => true } = {}) {
+      const all = [];
+      let next = null;
+      let page = 0;
+
+      while (page < LOOKUPS.maxPages) {
+        const body = { query: { fields, filters } };
+        if (next) body.next_token = next;   // only sent when the API gave us one
+        const data = await superleapPost(`/org/objects/${slug}/filter`, body);
+        const { records, nextToken } = extractRecordsPage(data);
+        page++;
+
+        records.forEach(r => {
+          const id = r?.id ?? r?.record_id;
+          if (id && accept(r)) all.push({ label: String(r.name ?? '').trim() || '(no name)', value: String(id) });
+        });
+
+        // Stop on: last page (no token), empty page, or the same token coming back
+        if (!nextToken || records.length === 0 || nextToken === next) break;
+        next = nextToken;
+      }
+      if (page >= LOOKUPS.maxPages) console.warn(`[${slug}] stopped after ${LOOKUPS.maxPages} pages`);
+
+      // Same name used by several records (e.g. two "Superleap" accounts) -> show the ID to tell them apart
+      const counts = {};
+      all.forEach(r => { counts[r.label] = (counts[r.label] || 0) + 1; });
+      all.forEach(r => { if (counts[r.label] > 1) r.meta = `ID ${r.value}`; });
+
+      return all.sort((a, b) => a.label.localeCompare(b.label));
+    }
+
+    // key = cache key (e.g. 'accounts' or 'contacts:<accountId>'), options passed to fetchAllRecords
+    function loadLookup(key, slug = key, options) {
+      if (!lookupCache[key]) {
+        lookupCache[key] = fetchAllRecords(slug, options).catch(err => {
+          delete lookupCache[key];     // allow a retry on next focus
+          throw err;
+        });
+      }
+      return lookupCache[key];
+    }
+
+    // A link field may come back as an ID string or as an object like { id, name }
+    function linkedId(value) {
+      if (value == null) return null;
+      if (typeof value === 'object') return value.id ?? value.record_id ?? null;
+      return String(value);
+    }
+
+    let warnedMissingLink = false;
+    function warnMissingLinkField() {
+      if (warnedMissingLink) return;
+      warnedMissingLink = true;
+      console.warn(`[contacts] "${LOOKUPS.contactAccountField}" not returned by the filter API; relying on the server-side filter only`);
+    }
+
+    function loadContactsForAccount(accountId) {
+      const field = LOOKUPS.contactAccountField;
+      return loadLookup(`contacts:${accountId}`, LOOKUPS.contactsSlug, {
+        fields: ['name', 'record_id', field],
+        filters: { and: [{ field, operator: 'eq', value: accountId }] },
+        // Double-check the filter. If the API doesn't return the link field at all, trust the filter.
+        accept: r => {
+          if (!(field in (r || {}))) { warnMissingLinkField(); return true; }
+          return String(linkedId(r[field])) === String(accountId);
+        },
+      });
+    }
+
+    async function searchLookup(slug, keyword, loader = () => loadLookup(slug)) {
+      const all = await loader();
+      const k = keyword.toLowerCase();
+      const matches = k ? all.filter(r => r.label.toLowerCase().includes(k)) : all;
+      const shown = matches.slice(0, LOOKUPS.maxShown);
+      shown.truncated = matches.length > shown.length;
+      return shown;
+    }
+
+
+    /* ============ Stonefield product API ============ */
+    let accessToken = null;
+    let tokenPromise = null;
+
+    async function getAccessToken(forceRefresh = false) {
+      if (accessToken && !forceRefresh) return accessToken;
+      if (tokenPromise && !forceRefresh) return tokenPromise;
+
+      tokenPromise = (async () => {
+        const res = await fetch(PRODUCT_API.authUrl, {
+          method: 'POST',
+          headers: { apikey: PRODUCT_API.apiKey },
+        });
+        if (!res.ok) throw new Error(`Auth failed (${res.status})`);
+        const data = await res.json();
+        const token = data?.Code === 200 ? data?.Results?.accesstoken : null;
+        if (!token) throw new Error(`No access token (Code ${data?.Code})`);
+        accessToken = token;
+        return token;
+      })();
+
+      try { return await tokenPromise; }
+      finally { tokenPromise = null; }
+    }
+
+    const MOCK_PRODUCTS = [
+      { itemid: 3028, itemnameraw: '11D3028-1 ENERGY 1000 NATURE IDENTICAL LIQUID', itemtype: 'N' },
+      { itemid: 1008, itemnameraw: '12D1008-1 ORANGE JUICY FLAVOUR NATURE IDENTICAL LIQUID', itemtype: 'N' },
+      { itemid: 4100, itemnameraw: '12D4100-1 MANGO LATTE (REGULATORY VERIFICATION PENDING) ', itemtype: 'N' },
+      { itemid: 3100, itemnameraw: '14D3100-1 CABBAGE -02 FLAVOUR NATURE IDENTICAL LIQUID', itemtype: 'N' },
+      { itemid: 5100, itemnameraw: '41D5100-1 LIME CAPONE NATURAL POWDER', itemtype: 'N' },
+    ];
+
+    async function fetchProducts(keyword, retried = false) {
+      if (USE_MOCK_PRODUCTS) {
+        await new Promise(r => setTimeout(r, 300));
+        const k = keyword.toLowerCase();
+        return MOCK_PRODUCTS.filter(p => p.itemnameraw.toLowerCase().includes(k) || String(p.itemid).includes(k));
+      }
+
+      const token = await getAccessToken(retried);
+      const res = await fetch(PRODUCT_API.searchUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: PRODUCT_API.apiKey,
+          accesstoken: token,
+        },
+        body: JSON.stringify({ keyword }),
+      });
+      const data = await res.json().catch(() => null);
+      const expired = res.status === 401 || res.status === 403 || data?.Code === 401 || data?.Code === 403;
+      if (expired && !retried) return fetchProducts(keyword, true);   // one retry with fresh token
+      if (!res.ok || data?.Code !== 200) throw new Error(`Search failed (HTTP ${res.status}, Code ${data?.Code})`);
+
+      return Array.isArray(data.Results) ? data.Results : [];
+    }
+
+    async function searchProducts(keyword) {
+      const items = await fetchProducts(keyword);
+      return items
+        .map(i => ({
+          label: String(i.itemnameraw || '').trim(),
+          value: i.itemid != null ? String(i.itemid) : '',
+          meta: i.itemid != null ? `Item ID ${i.itemid}` : '',
+        }))
+        .filter(p => p.label);
+    }
+
+
+    /* ============ Reusable searchable dropdown ============ */
+    function createCombo({
+      input, search,
+      minChars = 0, debounceMs = 0,
+      allowCustom = false,             // products: allow free text
+      standard = false,                // products: green styling for list items
+      hint = null,
+      pendingMessage = 'Loading…',
+      errorMessage = 'Could not load options. Try again.',
+      emptyMessage = 'No matches',
+      onChange = null,                 // called with the selected item (or null when cleared)
+    }) {
+      const list = input.parentElement.querySelector('.combo-list');
+      let results = [];
+      let selected = null;
+      let activeIndex = -1;
+      let timer = null;
+      let seq = 0;
+
+      const open = () => { if (document.activeElement === input) list.classList.add('open'); };
+      const close = () => { list.classList.remove('open'); activeIndex = -1; };
+
+      function setSelected(item) {
+        const changed = selected !== item;
+        selected = item;
+        if (changed && onChange) onChange(item);
+        if (standard) {
+          const isStd = !!item && !item.custom;
+          input.classList.toggle('is-standard', isStd);
+          if (hint) {
+            hint.textContent = isStd ? 'From standard list'
+              : input.value.trim() ? 'Custom product (not in standard list)' : '';
+            hint.classList.toggle('standard', isStd);
+          }
+        }
+      }
+
+      function renderMessage(msg) {
+        list.innerHTML = `<li class="combo-msg">${escapeHtml(msg)}</li>`;
+        open();
+      }
+
+      function render(keyword) {
+        const cls = standard ? 'combo-item standard' : 'combo-item';
+        let html = results.map((r, i) => `
+      <li class="${cls}" data-index="${i}" role="option">
+        ${standard ? '<span class="dot"></span>' : ''}
+        <span>
+          <div class="name">${escapeHtml(r.label)}</div>
+          ${r.meta ? `<div class="meta">${escapeHtml(r.meta)}</div>` : ''}
+        </span>
+      </li>`).join('');
+
+        if (!results.length) html = `<li class="combo-msg">${escapeHtml(standard ? 'No standard products found' : emptyMessage)}</li>`;
+        if (results.truncated) html += `<li class="combo-msg">Showing first ${results.length}. Type to narrow down.</li>`;
+
+        const exact = results.some(r => r.label.toLowerCase() === keyword.toLowerCase());
+        if (allowCustom && keyword && !exact) {
+          html += `<li class="combo-item" data-index="custom" role="option">
+                 <span><div class="name">Use "${escapeHtml(keyword)}" as custom product</div></span>
+               </li>`;
+        }
+        list.innerHTML = html;
+        activeIndex = -1;
+        open();
+      }
+
+      async function runSearch(keyword) {
+        const mySeq = ++seq;
+        const slow = debounceMs ? null : setTimeout(() => { if (mySeq === seq) renderMessage(pendingMessage); }, 150);
+        try {
+          const found = await search(keyword);
+          if (mySeq !== seq) return;   // a newer search superseded this one
+          results = found;
+          render(keyword);
+        } catch (err) {
+          if (mySeq !== seq) return;
+          console.error('Dropdown search error:', err);
+          results = [];
+          renderMessage(errorMessage);
+        } finally {
+          clearTimeout(slow);
+        }
+      }
+
+      function trigger() {
+        const keyword = input.value.trim();
+        clearTimeout(timer);
+        if (keyword.length < minChars) { seq++; close(); return; }
+        if (debounceMs) {
+          renderMessage(pendingMessage);
+          timer = setTimeout(() => runSearch(keyword), debounceMs);
+        } else {
+          runSearch(keyword);
+        }
+      }
+
+      function choose(index) {
+        if (index === 'custom') {
+          setSelected({ custom: true, label: input.value.trim(), value: '' });
+        } else {
+          const item = results[index];
+          if (!item) return;
+          input.value = item.label;
+          setSelected(item);
+        }
+        setError(input, '');
+        close();
+      }
+
+      function highlight(delta) {
+        const items = [...list.querySelectorAll('.combo-item')];
+        if (!items.length) return;
+        activeIndex = (activeIndex + delta + items.length) % items.length;
+        items.forEach((el, i) => el.classList.toggle('active', i === activeIndex));
+        items[activeIndex].scrollIntoView({ block: 'nearest' });
+      }
+
+      input.addEventListener('input', () => { setSelected(null); trigger(); });
+      input.addEventListener('focus', () => { if (!input.readOnly && !input.disabled && minChars === 0) trigger(); });
+      input.addEventListener('blur', () => setTimeout(close, 100));
+
+      input.addEventListener('keydown', (e) => {
+        if (!list.classList.contains('open')) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); highlight(1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); highlight(-1); }
+        else if (e.key === 'Enter') {
+          e.preventDefault();
+          const active = list.querySelectorAll('.combo-item')[activeIndex];
+          if (active) choose(active.dataset.index === 'custom' ? 'custom' : Number(active.dataset.index));
+        }
+        else if (e.key === 'Escape') close();
+      });
+
+      list.addEventListener('mousedown', (e) => {
+        const item = e.target.closest('.combo-item');
+        if (!item) return;
+        e.preventDefault();            // keep focus so blur doesn't close first
+        choose(item.dataset.index === 'custom' ? 'custom' : Number(item.dataset.index));
+      });
+
+      return {
+        getSelected: () => selected,
+        setLocked(locked) { input.readOnly = locked; if (locked) close(); },
+        setDisabled(disabled, placeholder) {
+          input.disabled = disabled;
+          if (placeholder) input.placeholder = placeholder;
+          if (disabled) close();
+        },
+        reset() { input.value = ''; setSelected(null); close(); setError(input, ''); },
+      };
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+
+    /* ============ Sample request section ============ */
+    const srName = document.getElementById('sr_name');
+    const srDescription = document.getElementById('sr_description');
+
+    let selectedAccountId = null;
+
+    const contactCombo = createCombo({
+      input: document.getElementById('sr_contact'),
+      search: kw => selectedAccountId
+        ? searchLookup(LOOKUPS.contactsSlug, kw, () => loadContactsForAccount(selectedAccountId))
+        : Promise.resolve([]),
+      pendingMessage: 'Loading contacts…',
+      errorMessage: 'Could not load contacts. Click the field again to retry.',
+      emptyMessage: 'No contacts linked to this account',
+    });
+
+    const accountCombo = createCombo({
+      input: document.getElementById('sr_account'),
+      search: kw => searchLookup(LOOKUPS.accountsSlug, kw),
+      pendingMessage: 'Loading accounts…',
+      errorMessage: 'Could not load accounts. Click the field again to retry.',
+      onChange: (account) => {
+        // A different (or no) account means the previous contact no longer applies
+        contactCombo.reset();
+        selectedAccountId = account ? account.value : null;
+        if (selectedAccountId) {
+          contactCombo.setDisabled(false, 'Search contact');
+          loadContactsForAccount(selectedAccountId).catch(() => { });   // preload this account's contacts
+        } else {
+          contactCombo.setDisabled(true, 'Select an account first');
+        }
+      },
+    });
+
+    [srName, srDescription].forEach(el => el.addEventListener('input', () => setError(el, '')));
+
+    function collectSampleRequest() {
+      let valid = true;
+      const name = srName.value.trim();
+      const account = accountCombo.getSelected();
+      const contact = contactCombo.getSelected();
+      const accountInput = document.getElementById('sr_account');
+      const contactInput = document.getElementById('sr_contact');
+
+      if (!name) { setError(srName, 'Enter a name'); valid = false; }
+      if (!account) { setError(accountInput, 'Select an account from the list'); valid = false; }
+      if (!contact && contactInput.value.trim()) {
+        setError(contactInput, 'Select a contact from the list, or clear this field'); valid = false;
+      }
+      if (!valid) return null;
+
+      const f = SAMPLE_REQUEST.fields;
+      const record = {
+        [f.name]: name,
+        [f.account]: account.value,
+        [f.description]: srDescription.value.trim(),
+      };
+      if (contact) record[f.contact] = contact.value;
+      return record;
+    }
+
+    function lockSampleRequest(locked) {
+      srName.readOnly = locked;
+      srDescription.readOnly = locked;
+      accountCombo.setLocked(locked);
+      contactCombo.setLocked(locked);
+    }
+
+
+    /* ============ Product rows ============ */
+    const rowsEl = document.getElementById('rows');
+    let rowCounter = 0;
+
+    function createRow() {
+      rowCounter++;
+      const id = rowCounter;
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = `
+    <div class="row-head">
+      <span class="row-title">Product</span>
+      <button type="button" class="remove-btn" aria-label="Remove this product">Remove</button>
+    </div>
+    <div class="grid grid-product">
+      <div>
+        <label for="product_${id}">Product <span class="req">*</span></label>
+        <div class="combo">
+          <input type="text" id="product_${id}" data-field="product" placeholder="Search product" autocomplete="off" role="combobox" aria-autocomplete="list">
+          <ul class="combo-list" role="listbox"></ul>
+        </div>
+        <div class="combo-hint"></div>
+        <div class="field-error"></div>
+      </div>
+      <div>
+        <label for="packing_${id}">Packing <span class="req">*</span></label>
+        <input type="number" id="packing_${id}" data-field="packing" min="0" step="1" placeholder="0">
+        <div class="field-error"></div>
+      </div>
+      <div>
+        <label for="quantity_${id}">Quantity <span class="req">*</span></label>
+        <input type="number" id="quantity_${id}" data-field="quantity" min="0" step="0.01" placeholder="0.00">
+        <div class="field-error"></div>
+      </div>
+      <div class="full">
+        <label for="remarks_${id}">Remarks</label>
+        <textarea id="remarks_${id}" data-field="remarks" placeholder="Optional"></textarea>
+        <div class="field-error"></div>
+      </div>
+    </div>
+  `;
+
+      row.querySelector('.remove-btn').addEventListener('click', () => { row.remove(); refreshRows(); });
+      row.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', () => setError(el, '')));
+
+      row.productCombo = createCombo({
+        input: row.querySelector('[data-field="product"]'),
+        search: searchProducts,
+        minChars: PRODUCT_API.minChars,
+        debounceMs: PRODUCT_API.debounceMs,
+        allowCustom: true,
+        standard: true,
+        hint: row.querySelector('.combo-hint'),
+        pendingMessage: 'Searching…',
+        errorMessage: 'Could not load products. You can still type a custom product.',
+      });
+
+      rowsEl.appendChild(row);
+      refreshRows();
+    }
+
+    function refreshRows() {
+      const rows = rowsEl.querySelectorAll('.row');
+      rows.forEach((row, i) => {
+        row.querySelector('.row-title').textContent = `Product ${i + 1}`;
+        row.querySelector('.remove-btn').style.visibility = rows.length > 1 ? 'visible' : 'hidden';
+      });
+    }
+
+    function collectProducts() {
+      const records = [];
+      let valid = true;
+      const f = PRODUCTS.fields;
+
+      rowsEl.querySelectorAll('.row').forEach(row => {
+        const get = name => row.querySelector(`[data-field="${name}"]`);
+        const productEl = get('product'), packingEl = get('packing'),
+          quantityEl = get('quantity'), remarksEl = get('remarks');
+
+        const product = productEl.value.trim();
+        const packing = packingEl.value.trim();
+        const quantity = quantityEl.value.trim();
+
+        if (!product) { setError(productEl, 'Enter a product'); valid = false; }
+
+        if (packing === '') { setError(packingEl, 'Enter packing'); valid = false; }
+        else if (!Number.isInteger(Number(packing)) || Number(packing) < 0) {
+          setError(packingEl, 'Use a whole number'); valid = false;
+        }
+
+        if (quantity === '') { setError(quantityEl, 'Enter quantity'); valid = false; }
+        else if (isNaN(Number(quantity)) || Number(quantity) < 0) {
+          setError(quantityEl, 'Use a valid number'); valid = false;
+        }
+
+        records.push({
+          [f.product]: product,
+          [f.packing]: parseInt(packing, 10),
+          [f.quantity]: parseFloat(quantity),
+          [f.remarks]: remarksEl.value.trim(),
+        });
+      });
+
+      return valid ? records : null;
+    }
+
+
+    /* ============ Helpers ============ */
+    const statusEl = document.getElementById('status');
+    const submitBtn = document.getElementById('submitBtn');
+    const addMoreBtn = document.getElementById('addMoreBtn');
+
+    function setError(el, msg) {
+      el.classList.toggle('invalid', !!msg);
+      const container = el.closest('.combo') ? el.closest('.combo').parentElement : el.parentElement;
+      const errEl = container.querySelector('.field-error');
+      if (errEl) errEl.textContent = msg;
+    }
+
+    function setStatus(msg, type) {
+      statusEl.textContent = msg;
+      statusEl.className = 'status' + (type ? ' ' + type : '');
+    }
+
+    function setBusy(busy, label = 'Submitting…') {
+      submitBtn.disabled = busy || (!SUPERLEAP_AUTH && !DRY_RUN);
+      addMoreBtn.disabled = busy;
+      submitBtn.textContent = busy ? label : 'Submit';
+    }
+
+    function resetForm() {
+      srName.value = '';
+      srDescription.value = '';
+      accountCombo.reset();
+      contactCombo.reset();
+      lockSampleRequest(false);
+      rowsEl.innerHTML = '';
+      createRow();
+    }
+
+
+    /* ============ Submit: sample request → products ============ */
+    // Kept across retries of the SAME submission, so a retry never creates a second sample request.
+    //   formReference: unique code saved on the sample request
+    //   sampleId:      its record ID, once found
+    let pending = null;
+
+    function newFormReference() {
+      if (window.crypto?.randomUUID) return crypto.randomUUID();
+      return 'ref-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 12);
+    }
+
+    async function submitAll() {
+      setStatus('');
+
+      // Validate everything before any API call (sample section is locked after step 1 on a retry)
+      const sampleRecord = pending ? null : collectSampleRequest();
+      const productRecords = collectProducts();
+      if ((!pending && !sampleRecord) || !productRecords) {
+        setStatus('Fix the highlighted fields and try again.', 'err');
+        return;
+      }
+
+      const refField = SAMPLE_REQUEST.fields.formReference;
+      const linkField = PRODUCTS.fields.sampleRequest;
+
+      // if (DRY_RUN) {
+      //   console.log('[DRY RUN] 1) Create in', SAMPLE_REQUEST.objectSlug, [{ ...sampleRecord, [refField]: '<generated code>' }]);
+      //   console.log('[DRY RUN] 2) Find it by', refField, 'to get its id');
+      //   console.log('[DRY RUN] 3) Create in', PRODUCTS.objectSlug,
+      //   productRecords.map(p => ({ ...p, [linkField]: '<sample_request_id>' })));
+      //   setStatus(`Dry run: 1 sample request + ${productRecords.length} product(s) ready. Check the console.`, 'ok');
+      //   return;
+      // }
+
+      try {
+        if (!pending) {
+          pending = { formReference: newFormReference(), sampleId: null, record: sampleRecord };
+          lockSampleRequest(true);     // details can't change once we start creating it
+        }
+
+        if (!pending.sampleId) {
+          // On a retry, the sample request may already exist: look for it before creating
+          setBusy(true, 'Checking sample request…');
+          let id = pending.attempted ? await findSampleRequestIdWithRetry(pending.formReference) : null;
+
+          if (!id) {
+            setBusy(true, 'Creating sample request…');
+            pending.attempted = true;
+            await bulkCreate(SAMPLE_REQUEST.objectSlug, [{ ...pending.record, [refField]: pending.formReference }]);
+
+            setBusy(true, 'Finding sample request…');
+            id = await findSampleRequestIdWithRetry(pending.formReference);
+            if (!id) throw new Error('Sample request was created but could not be found yet.');
+          }
+          pending.sampleId = id;
+        }
+
+        setBusy(true, 'Adding products…');
+        const linked = productRecords.map(p => ({ ...p, [linkField]: pending.sampleId }));
+        await bulkCreate(PRODUCTS.objectSlug, linked);
+
+        setStatus(`Sample request created with ${linked.length} product(s).`, 'ok');
+        pending = null;
+        resetForm();
+        closeCRMForm();
+      } catch (err) {
+        console.error('Submit failed:', err);
+        if (pending?.attempted) {
+          setStatus(`Submission not finished: ${err.message} Click Submit to retry. ` +
+            `The sample request won't be created twice.`, 'err');
+        } else {
+          pending = null;              // nothing was created, start fresh next time
+          lockSampleRequest(false);
+          setStatus('Could not submit: ' + (err.message || err), 'err');
+        }
+      } finally {
+        setBusy(false);
+      }
+    }
+
+
+    /* ============ Init ============ */
+    addMoreBtn.addEventListener('click', createRow);
+    submitBtn.addEventListener('click', submitAll);
+    createRow();
+
+    if (!SUPERLEAP_AUTH) {
+      submitBtn.disabled = !DRY_RUN;   // dry runs don't call Superleap, so they still work
+      setStatus(`Missing access token. Open this form with ?${SUPERLEAP_API.tokenParam}=... in the URL.`, 'err');
+    } else {
+      // Start loading dropdown data right away (errors show when the field is opened)
+      loadLookup(LOOKUPS.accountsSlug).catch(() => { });
+      // contacts load per account, once an account is selected
+    }
+    </script>
+</body>
+
+</html>
